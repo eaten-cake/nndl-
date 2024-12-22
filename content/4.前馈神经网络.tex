@@ -1,0 +1,185 @@
+\section{前馈神经网络}
+
+\noindent\textbf{习题4-1} 对于一个神经元$\sigma(w^Tx+b)$，并使用梯度下降优化参数w时，如果输入x恒
+大于0，其收敛速度会比零均值化的输入更慢。
+
+非零中心化的输入将导致w的梯度全大于0或全小于0，使权重更新发生抖动，影响梯度下降速度。
+
+\noindent\textbf{习题4-2} 试设计一个前馈神经网络来解决XOR问题，要求该前馈神经网络具有两个隐藏神经元和一个输出神经元，并使用relu作为激活函数
+
+题目要求有两个隐藏神经元和一个输出神经元，那么网络应该有 $W^{(1)}$ 和 $w^{(2)}$ 两个权重，取：
+
+\[
+W^{(1)} = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}, b^{(1)} = \begin{bmatrix} 0 \\ -1 \end{bmatrix}
+\]
+
+\[
+w^{(2)} = \begin{bmatrix} 1 \\ -2 \end{bmatrix}, b^{(2)} = 0
+\]
+
+故整个网络的计算为：
+
+\[
+y = (w^{(2)})^T \left(\text{ReLU}\left((W^{(1)})^T X + b^{(1)}\right)\right) + b^{(2)}
+\]
+
+代入
+
+\[
+X = \begin{bmatrix} 0 & 0 & 1 & 1 \\ 0 & 1 & 0 & 1 \end{bmatrix}
+\]
+
+可以算得：
+
+\[
+y = \begin{bmatrix} 0 & 1 & 1 & 0 \end{bmatrix}
+\]
+
+\noindent\textbf{习题4-3} 试举例说明“死亡ReLU问题”，并提出解决方法。
+
+假设有一个神经元，其输入为 $x$，权重为 $w$，偏置为 $b$：
+\[
+y = \text{ReLU}(wx + b)
+\]
+
+如果在训练过程中，对于所有输入 $x$，都有 $wx + b < 0$，那么：
+\begin{enumerate}
+    \item 输出始终为0
+    \item 梯度也始终为0
+    \item 权重无法更新
+    \item 这个神经元就"死亡"了
+\end{enumerate}
+
+解决方案：
+\begin{enumerate}
+    \item 使用Leaky ReLU
+    \item 使用PReLU
+    \item 使用ELU
+    \item 使用SELU
+    \item 使用Swish
+\end{enumerate}
+
+\noindent\textbf{习题4-4} 计算Swish函数和GELU函数的导数。
+
+(1) Swish函数的导数推导
+
+Swish函数定义为：
+\[
+\text{Swish}(x) = x \cdot \sigma(x)
+\]
+其中 $\sigma(x)$ 是sigmoid函数：
+\[
+\sigma(x) = \frac{1}{1 + e^{-x}}
+\]
+
+使用求导的乘法法则：
+\[
+\frac{d}{dx}[\text{Swish}(x)] = \frac{d}{dx}[x \cdot \sigma(x)] = \sigma(x) + x \cdot \frac{d}{dx}[\sigma(x)]
+\]
+
+sigmoid函数的导数为：
+\[
+\frac{d}{dx}[\sigma(x)] = \sigma(x)(1-\sigma(x))
+\]
+
+代入得到Swish函数的导数：
+\[
+\text{Swish}'(x) = \sigma(x) + x \cdot \sigma(x)(1-\sigma(x)) = \sigma(x)[1 + x(1-\sigma(x))]
+\]
+
+(2) GELU函数的导数推导
+
+GELU函数定义为：
+\[
+\text{GELU}(x) = x \cdot \Phi(x)
+\]
+其中 $\Phi(x)$ 是标准正态分布的累积分布函数：
+\[
+\Phi(x) = \frac{1}{2}\left[1 + \text{erf}\left(\frac{x}{\sqrt{2}}\right)\right]
+\]
+
+使用求导的乘法法则：
+\[
+\frac{d}{dx}[\text{GELU}(x)] = \Phi(x) + x \cdot \frac{d}{dx}[\Phi(x)]
+\]
+
+标准正态分布的概率密度函数为：
+\[
+\frac{d}{dx}[\Phi(x)] = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+\]
+
+因此GELU函数的导数为：
+\[
+\text{GELU}'(x) = \Phi(x) + x \cdot \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+\]
+
+\noindent\textbf{习题4-5} 如果限制一个神经网络的总神经元数量（不考虑输入层）为N+1，输入层大小为
+$M_0$，输出层大小为1，隐藏层的层数为L，每个隐藏层的神经元数量为$\frac{N}{L}$，试分析参数数量
+和隐藏层层数L的关系。
+
+\noindent\textbf{解：} 让我们逐步分析参数数量和隐藏层层数L的关系。
+
+(1) 首先，明确各层的神经元数量：
+\begin{itemize}
+    \item 输入层：$M_0$ 个神经元
+    \item 每个隐藏层：$\frac{N}{L}$ 个神经元
+    \item 输出层：1个神经元
+\end{itemize}
+
+(2) 计算参数数量：
+\begin{itemize}
+    \item 第一个隐藏层的参数：权重 $M_0 \cdot \frac{N}{L}$ + 偏置 $\frac{N}{L}$ = $\frac{N}{L}(M_0 + 1)$
+    \item 中间隐藏层的参数（每层）：权重 $\frac{N}{L} \cdot \frac{N}{L}$ + 偏置 $\frac{N}{L}$ = $\frac{N}{L}(\frac{N}{L} + 1)$
+    \item 输出层的参数：权重 $\frac{N}{L} \cdot 1$ + 偏置 1 = $\frac{N}{L} + 1$
+\end{itemize}
+
+(3) 总参数数量P为：
+\[
+P = \frac{N}{L}(M_0 + 1) + (L-1)\frac{N}{L}(\frac{N}{L} + 1) + (\frac{N}{L} + 1)
+\]
+
+整理得：
+\[
+P = \frac{N}{L}(M_0 + 1) + \frac{N^2}{L^2}(L-1) + \frac{N}{L}(L-1) + (\frac{N}{L} + 1)
+\]
+\[
+= \frac{N}{L}(M_0 + 1) + \frac{N^2}{L^2}(L-1) + \frac{N}{L}L + 1
+\]
+\[
+= \frac{N}{L}(M_0 + 2) + \frac{N^2}{L^2}(L-1) + 1
+\]
+
+(4) 分析P与L的关系：
+
+当L增大时：
+\begin{itemize}
+    \item 第一项 $\frac{N}{L}(M_0 + 2)$ 随L增大而减小
+    \item 第二项 $\frac{N^2}{L^2}(L-1)$ 中，$\frac{N^2}{L^2}$ 的减小速度快于 $(L-1)$ 的增长速度
+    \item 第三项为常数1
+\end{itemize}
+
+因此，总的参数数量P随着L的增大而减小，这说明：
+\begin{itemize}
+    \item 在固定总神经元数量的情况下，层数越多，参数量越少
+    \item 这是因为层数增加会导致每层的神经元数量减少，从而减少了层间连接的数量
+    \item 但需要注意的是，过多的层数可能会导致每层神经元太少，影响网络的表达能力
+\end{itemize}
+
+\noindent\textbf{习题4-6} 证明通用近似定理对于具有线性输出层和至少一个使用ReLU激活函数的隐藏层
+组成的前馈神经网络，也都是适用的。
+
+
+
+\noindent\textbf{习题4-7} 为什么在神经网络模型的结构化风险函数中不对偏置b进行正则化。
+
+加入正则化项的目的是为了防止过拟合, 防止它对于输入的微小变化过于敏感, 但偏置对任意的输入都产生同样的效应, 加入他们对于防止过拟合没有什么帮助.
+
+\noindent\textbf{习题4-8} 为什么在用反向传播算法进行参数学习时要采用随机参数初始化的方法，而不是
+直接令$W=0,b=0$
+
+将 w​ 初始化为 0 会使得同一层的神经元在计算时没有区别性, 具有同样的梯度, 产生同样的权重更新.
+
+\noindent\textbf{习题4-9} 梯度消失问题是否可以通过增加学习率来缓解。
+
+可以缓解, 但不一定能得到理想的效果, 增大学习率可能使最优值被跨越, 也可能造成梯度爆炸.
+

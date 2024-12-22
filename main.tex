@@ -1,7 +1,10 @@
-\documentclass[12pt,a4paper]{ctexart}
+\documentclass[12pt,a4paper]{article}
 \usepackage{fontspec}  % 使用 fontspec 宏包来设置字体
 \usepackage{xeCJK}     % 用于支持中文
 \usepackage{graphicx}  % 用于插入图片
+\usepackage{amsmath}  % 用于数学公式
+\usepackage{amssymb}  % 用于数学符号
+\usepackage{ctex} % 中文支持
 \setCJKmainfont{SimSun} % 设置中文字体为宋体（SimSun）
 
 \begin{document}
@@ -10,6 +13,8 @@
 \maketitle
 
 \input{content/2.基本概念.tex}
+
+\input{content/4.前馈神经网络.tex}
 
 
 \end{document}

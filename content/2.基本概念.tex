@@ -13,3 +13,21 @@
 \end{equation}
 计算其最优参数$w^{*}$，并分析权重$r^{(n)}$的作用。
 
+我们令 $[r^{(n)}]^2 = r^{(n)}$ 则：
+
+\[\mathcal{R}(w) = \frac{1}{2}\sum_{n=1}^N [r^{(n)}]^2(y^{(n)} - w^\top x^{(n)})^2\]
+
+\[= \frac{1}{2}\sum_{n=1}^N \left(r^{(n)}(y^{(n)} - w^\top x^{(n)})\right)^2\]
+
+\[= \frac{1}{2}\|r^\top(y - X^\top w)\|^2\]
+
+对风险函数参数 $w$ 求导：
+
+\[\frac{\partial}{\partial w}\mathcal{R}(w) = \frac{\partial}{\partial w}\frac{1}{2}\|r^\top(y - X^\top w)\|^2\]
+
+\[= -Xrr^\top(y - X^\top w) = 0\]
+
+\[w^* = (Xrr^\top X^\top)^{-1}Xrr^\top y\]
+
+其中，参数 $r^{(n)}$ 是为了对不同的数据进行加权，相当于不同的数据对结果的影响程度会不同。如果有某个数据比较重要，希望对其能够给予高度重视，那么就可以设置相对较大的权重，反之则设置小一点。
+
