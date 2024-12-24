@@ -1,0 +1,67 @@
+\section{循环神经网络}
+
+\noindent\textbf{习题6-1} 分析延时神经网络、卷积神经网络和循环神经网络的异同点。
+
+三者都是典型的神经网络模型。
+卷积神经网络是对前馈神经网络增加卷积层和池化层。
+延时神经网络是对前馈神经网络增加延时器。
+循环神经网络是对前馈神经网络增加自反馈的神经元。
+
+延时神经网络和循环神经网络是给网络增加短期记忆能力的两种重要方法。
+
+卷积神经网络和循环神经网络的区别在循环层上。
+卷积神经网络没有时序性的概念，输入直接和输出挂钩；循环神经网络具有时序性，当前决策跟前一次决策有关。
+举个例子，进行手写数字识别的时候，我们并不在意前一个决策结果是什么，需要用卷积神经网络；（图像识别）
+而自然语言生成时，上一个词很大程度影响了下一个词，需要用循环神经网络。（自然语言处理）
+
+\noindent\textbf{习题6-2} 推导公式（6.40）和公式（6.41）中的梯度。
+
+\noindent\textbf{（1）6.40}
+
+\[
+\frac{\partial L_t}{\partial w_{ij}} = \sum_{k=1}^t \frac{\partial^+ z_k}{\partial w_{ij}} \frac{\partial L_t}{\partial z_k}
+\]
+
+\[
+\delta_{t,k} = \frac{\partial L_t}{\partial z_k}
+= \frac{\partial h_k}{\partial z_k} \frac{\partial z_{k+1}}{\partial h_k} \frac{\partial L_t}{\partial z_{k+1}}
+= diag(f'(z_k))U^T \delta_{t,k+1}
+\]
+
+\[
+\frac{\partial^+ z_k}{\partial w_{ij}} = [0,...,[x_k]_i,...,0]
+\]
+
+\[
+\frac{\partial L_t}{\partial w_{ij}} = \sum_{k=1}^t [\delta_{t,k}]_i[x_k]_j
+\]
+
+\noindent\textbf{（2）6.41}
+
+\[
+\frac{\partial L_t}{\partial b_{ij}} = \sum_{k=1}^t \frac{\partial^+ z_k}{\partial b_{ij}} \frac{\partial L_t}{\partial z_k}
+\]
+
+\[
+\delta_{t,k} = \frac{\partial L_t}{\partial z_k}
+= \frac{\partial h_k}{\partial z_k} \frac{\partial z_{k+1}}{\partial h_k} \frac{\partial L_t}{\partial z_{k+1}}
+= diag(f'(z_k))U^T \delta_{t,k+1}
+\]
+
+\[
+\frac{\partial^+ z_k}{\partial b_{ij}} = [0,...,1,...,0]
+\]
+
+\[
+\frac{\partial L_t}{\partial b_{ij}} = \sum_{k=1}^t \delta_{t,k}
+\]
+
+\noindent\textbf{习题6-3} 
+
+\noindent\textbf{习题6-4}
+
+\noindent\textbf{习题6-5}
+
+\noindent\textbf{习题6-6}
+
+\noindent\textbf{习题6-7} 

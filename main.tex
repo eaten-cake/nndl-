@@ -5,7 +5,10 @@
 \usepackage{amsmath}  % 用于数学公式
 \usepackage{amssymb}  % 用于数学符号
 \usepackage{ctex} % 中文支持
-\setCJKmainfont{SimSun} % 设置中文字体为宋体（SimSun）
+\setCJKmainfont{SimSun}[
+    BoldFont=SimHei,          % 将粗体设置为黑体
+    ItalicFont=KaiTi          % 将斜体设置为楷体
+]
 
 \begin{document}
 
@@ -16,6 +19,7 @@
 
 \input{content/4.前馈神经网络.tex}
 \input{content/5.卷积神经网络.tex}
+\input{content/6.循环神经网络.tex}
 
 
 \end{document}
