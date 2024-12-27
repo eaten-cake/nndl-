@@ -31,3 +31,190 @@
 
 其中，参数 $r^{(n)}$ 是为了对不同的数据进行加权，相当于不同的数据对结果的影响程度会不同。如果有某个数据比较重要，希望对其能够给予高度重视，那么就可以设置相对较大的权重，反之则设置小一点。
 
+\noindent\textbf{习题2-3} 证明在线性回归中，如果样本数量N小于特征数量D+1，则$XX^T$的秩最大为N。
+
+1. 关于矩阵秩的性质：
+- 由线性代数知识可知矩阵与其转置相乘的秩等于矩阵本身的秩，即 \[rank(XX^T) = rank(X)\]
+- 矩阵 X 的秩必定满足条件：\[rank(X) \leq min(D+1, N)\]，也就是说 X 的秩必须小于或等于 X 的行数和列数中的最小值
+- 如果 $N < D+1$ 的话，那么必定有 \[rank(X) \leq N\]
+- 故此，$XX^T$ 的秩最大为 $N$
+
+2. 关于拟合问题：
+- 如果特征数大于样本数的话，即使是常用的优化方法都无法去拟合数据，这种情况我们称之为拟合方程是欠定的
+- 换句话说，这种情况实际就是线性方程组的未知数个数大于方程个数，不存在唯一非零解
+
+\noindent\textbf{习题2-4}
+
+\[R(\omega) = \frac{1}{2}\|y - X^T\omega\|^2 + \frac{1}{2}\lambda\|\omega\|^2\]
+
+\[\frac{\partial R(\omega)}{\partial \omega} = \frac{1}{2}\frac{\partial \|y - X^T\omega\|^2}{\partial \omega} + \frac{1}{2}\lambda\frac{\partial \|\omega\|^2}{\partial \omega}\]
+
+\[= -X(y - X^T\omega) + \lambda\omega\]
+
+令$\frac{\partial R(\omega)}{\partial \omega}$为0：
+
+\[Xy = (XX^T + \lambda I)\omega^*\]
+
+\[\omega^* = (XX^T + \lambda I)^{-1}X\]
+
+\noindent\textbf{习题2-5} 在线性回归中，若假设标签$y~N(\omega^Tx,\beta)$，并用最大似然估计来优化参数，验证最优参数
+为公式（2.52）的解。
+
+\[log p(y|X; \omega, \sigma) = \sum_{n=1}^N logN(y^{(n)}; \omega^T x^{(n)}, \sigma^2)\]
+
+\[\frac{\partial log p(y|X; \omega, \sigma)}{\partial \omega} = \frac{\partial \sum_{n=1}^N \frac{(y^{(n)} - \omega^T x^{(n)})^2}{2\sigma^2}}{\partial \omega}\]
+
+\[= \frac{\partial \frac{1}{2} \|y - X^T\omega\|^2}{\partial \omega}\]
+
+\[= -X(y - X^T\omega)\]
+
+令$\frac{\partial R(\omega)}{\partial \omega}$为0:
+
+\[\omega^{ML} = (XX^T)^{-1}Xy\]
+
+\noindent\textbf{习题2-6} 假设有N个样本$x^{(1)},x^{(2)},x^{(3)},...,x^{(N)}$服从正态分布$N(\mu,\delta^2)$，其中$\mu$未知
+1）使用最大似然估计来求解最优参数$\mu^{ML}$;2）若参数$\mu$为随机变量，并服从正态分布$N(\mu_0,\delta^2_0)$，使用最大后验估计来求解
+最优参数$\mu^{MAP}$。
+
+1) 参数$\mu$在样本$\mathbf{x}$上的似然函数为
+
+\[p(\mathbf{x}|\mu,\sigma^2)=\prod_{n=1}^N p(x^{(n)};\mu,\sigma^2),\]
+
+对数似然函数为
+
+\[\log p(\mathbf{x};\mu,\sigma^2)=\sum_{n=1}^N \log p(x^{(n)};\mu,\sigma^2)=\sum_{n=1}^N \left(\log\frac{1}{\sqrt{2\pi}\sigma}-\frac{(x^{(n)}-\mu)^2}{2\sigma^2}\right).\]
+
+我们的目标是找到参数$\mu$的一个估计使得似然函数最大，等价于对数似然函数最大。令
+
+\[\frac{\partial \log p(\mathbf{x};\mu,\sigma^2)}{\partial \mu}=\frac{1}{\sigma^2}\sum_{n=1}^N(x^{(n)}-\mu)=0,\]
+
+得到$\mu^{ML}=\frac{1}{N}\sum_{n=1}^N x^{(n)}$，即样本均值。
+
+2) 参数$\mu$的后验分布为
+
+\[p(\mu|\mathbf{x};\mu_0,\sigma_0^2) \propto p(\mathbf{x}|\mu;\sigma^2)p(\mu;\mu_0,\sigma_0^2).\]
+
+令似然函数$p(\mathbf{x}|\mu;\sigma^2)$为高斯密度函数，则后验分布的对数为
+
+\[\log p(\mu|\mathbf{x};\mu_0,\sigma_0^2) \propto \log p(\mathbf{x}|\mu;\sigma^2)+\log p(\mu;\mu_0,\sigma_0^2)\]
+\[\propto -\frac{1}{\sigma^2}\sum_{n=1}^N(x^{(n)}-\mu)^2-\frac{1}{\sigma_0^2}(\mu-\mu_0)^2.\]
+
+令$\partial \log p(\mu|\mathbf{x};\mu_0,\sigma_0^2)/\partial \mu=0$，得到
+
+\[\mu^{MAP}=\left(\frac{1}{\sigma^2}\sum_{n=1}^N x^{(n)}+\frac{\mu_0}{\sigma_0^2}\right)/\left(\frac{N}{\sigma^2}+\frac{1}{\sigma_0^2}\right).\]
+
+证毕。
+
+\noindent\textbf{习题2-7} 在习题2-6中，证明当$N \to \infty$时，最大后验估计趋向于最大似然估计。
+
+证明：
+
+\[\mu^{MAP} = \frac{\frac{\sum_{i=1}^N x_i}{\sigma^2} + \frac{\mu_0}{\sigma_0^2}}{\frac{N}{\sigma^2} + \frac{1}{\sigma_0^2}} = \frac{\sigma_0^2\sum_{i=1}^N x_i + \sigma^2\mu_0}{N\sigma_0^2 + \sigma^2}\]
+
+\[\mu^{MLE} = \frac{1}{N}\sum_{i=1}^N x_i\]
+
+当$N \to \infty$时，$\mu^{MAP}$近似等于$\mu^{MLE}$，因为其他数都为常数：
+
+\[\lim_{N\to\infty} \mu^{MAP} = \lim_{N\to\infty} \frac{\sigma_0^2\sum_{i=1}^N x_i + \sigma^2\mu_0}{N\sigma_0^2 + \sigma^2} \approx \lim_{N\to\infty} \frac{\sigma_0^2\sum_{i=1}^N x_i}{N\sigma_0^2} = \frac{1}{N}\sum_{i=1}^N x_i = \mu^{MLE}\]
+
+\noindent\textbf{习题2-8} 验证公式（2.61）
+
+\noindent\textbf{习题2-9} 试分析什么因素会导致模型出现图2.6所示的高偏差和高方差情况。
+
+拟合能力强的模型一般复杂度会比较高，容易过拟合，方差比较高。
+
+如果限制模型复杂度，降低拟合能力，可能会欠拟合，偏差比较高．
+
+\noindent\textbf{习题2-10} 验证公式（2.66）
+
+\noindent\textbf{习题2-11} 分别用一元、二元和三元特征的词袋模型表示文本“我打了张三”和“张三打了我”，并分析不同模型的优缺点。
+
+假设 $x_1$ 为"我打了张三" $x_2$ 为"张三打了我"
+
+首先对句子进行分词：
+
+\{"我","打了","张三"\}
+
+1）一元特征：
+
+共有特征："我"、"张三"、"打了"
+
+\[
+x_1 = [1,1,1]
+\]
+
+\[
+x_2 = [1,1,1]
+\]
+
+可以看出一元特征下无法表示语序，只要单词相同，向量便相同
+
+2）二元特征：
+
+共有特征："\$我"、"\$张三"、"我打了"、"张三打了"、"打了张三"、"打了我"、"张三\#"、"我\#"
+
+\[
+x_1 = [1,0,1,0,1,0,1,0]
+\]
+
+\[
+x_2 = [0,1,0,1,0,1,0,1]
+\]
+
+二元特征可以表示出每个单词相邻的顺序，不同语序其向量不同
+
+3）三元特征：
+
+共有特征："\$我打了"、"\$张三打了"、"我打了张三"、"张三打了我"、"打了张三\#"、"打了我\#"
+
+\[
+x_1 = [1,0,1,0,1,0]
+\]
+
+\[
+x_2 = [0,1,0,1,0,1]
+\]
+
+三元特征可以表示出单词前后两个相邻位置信息
+
+\noindent\textbf{习题2-12} 对于一个三分类问题，数据集的真实标签和模型的预测标签如下：
+
+\begin{tabular}{ccccccccccc}
+\hline
+真实标签 & 1 & 1 & 2 & 2 & 2 & 3 & 3 & 3 & 3 \\
+预测标签 & 1 & 2 & 2 & 2 & 3 & 3 & 3 & 1 & 2 \\
+\hline
+\end{tabular}
+
+分别计算模型的精确率、召回率、F1值以及它们的宏平均和微平均。
+
+\textbf{解：} 设 $P_i$, $R_i$ 分别为类别 $i$ 的精确率和召回率
+
+\[P_1 = \frac{1}{2} \qquad R_1 = \frac{1}{2} \qquad F_1^1 = \frac{2\cdot\frac{1}{2}\cdot\frac{1}{2}}{\frac{1}{2}+\frac{1}{2}} = \frac{1}{2}\]
+
+\[P_2 = \frac{2}{4} = \frac{1}{2} \qquad R_2 = \frac{2}{3} \qquad F_2^1 = \frac{2\cdot\frac{1}{2}\cdot\frac{2}{3}}{\frac{1}{2}+\frac{2}{3}} = \frac{4}{7}\]
+
+\[P_3 = \frac{2}{3} \qquad R_3 = \frac{2}{4} = \frac{1}{2} \qquad F_3^1 = \frac{2\cdot\frac{2}{3}\cdot\frac{1}{2}}{\frac{2}{3}+\frac{1}{2}} = \frac{4}{7}\]
+
+宏平均:
+
+\[P_{macro} = \frac{1}{3}(\frac{1}{2} + \frac{1}{2} + \frac{2}{3}) = \frac{5}{9}\]
+
+\[R_{macro} = \frac{1}{3}(\frac{1}{2} + \frac{1}{2} + \frac{2}{3}) = \frac{5}{9}\]
+
+\[F_1^{macro} = \frac{2\frac{5}{9}\frac{5}{9}}{\frac{5}{9} + \frac{5}{9}} = \frac{5}{9}\]
+
+微平均:
+
+\[P_{micro} = \frac{\frac{1+2+2}{3}}{\frac{2+4+3}{3}} = \frac{5}{9}\]
+
+\[R_{micro} = \frac{\frac{1+2+2}{3}}{\frac{2+4+3}{3}} = \frac{5}{9}\]
+
+\[F_1^{micro} = \frac{2\frac{5}{9}\frac{5}{9}}{\frac{5}{9} + \frac{5}{9}} = \frac{5}{9}\]
+
+\[P_{micro} = R_{micro} = F_1^{micro}\]
+
+
+
+
+
