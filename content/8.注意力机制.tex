@@ -2,12 +2,76 @@
 
 \noindent\textbf{习题8-1} 分析LSTM模型中隐藏层神经元数量与参数数量之间的关系。
 
-\noindent\textbf{习题8-2}
+只考虑一层简单的循环神经网络，
+设隐藏层神经元数量为$$D$$ (即D维)，输入层的维数为$$M$$。
+一个LSTM层（隐藏层）的参数总数为：$$4D^2(D+M)+4D$$
 
-\noindent\textbf{习题8-3}
+\noindent\textbf{习题8-2} 分析缩放点积模型可以缓解Softmax函数梯度消失的原因。
 
-\noindent\textbf{习题8-4}
+（解答请自行观看插图）
 
-\noindent\textbf{习题8-5}
+\noindent\textbf{习题8-3} 当将自注意力模型作为一个神经层使用时，分析它和卷积层以及循环层在建模长距离依赖关系的效率和计算复杂度方面的差异。
 
-\noindent\textbf{习题8-6}
+\begin{table}[htb]
+\begin{tabular}{|c|c|c|c|}
+\hline
+模型 & 每层复杂度 & 序列操作数 & 最大路径长度 \\
+\hline
+CNN & $O(kLd^2)$ & $O(1)$ & $O(\log_k(L))$ \\
+\hline
+RNN & $O(Ld^2)$ & $O(L)$ & $O(L)$ \\
+\hline
+Transformer & $O(L^2d)$ & $O(1)$ & $O(1)$ \\
+\hline
+\end{tabular}
+
+$k$卷积核大小 \quad $L$序列长度 \quad $d$维度
+\end{table}
+
+
+\noindent\textbf{习题8-4} 试设计用集合、树、栈或队列来组织外部记忆，并分析它们的差异。
+
+按照内容寻址，阿西吧！
+
+\noindent\textbf{习题8-5} 分析端到端记忆网络和神经图灵机对外部记忆操作的异同点。
+
+共同点：都通过外部记忆单元进行读取与写入，而且由控制器进行读写的调用。
+
+不同点：
+
+1. 在读操作时，端到端记忆网络通过多跳操作进行读取数据，而且多跳中的参数是共享的；而神经图灵机在读取时直接基于内容寻址，控制器通过输出$h_t$产生查询向量，并计算读向量，并将读向量当作下一时刻控制器的输入；
+
+2. 在写操作时，端到端记忆网络无写操作其外部记忆单元为只读的；而神经图灵机是可读可写的，写操作包括两个子操作删除和增加，通过输出$h_t$产生删除向量和增加向量，进而写入外部记忆。
+
+\noindent\textbf{习题8-6} 证明Hopfield网络的能量函数随时间单调递减。
+
+参见: Hopfield 神经经网络动力学分析与应用郑晓曦博士论文中8.9页
+
+\[
+E = -\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n w_{ij}s_is_j - \sum_i b_is_i = -\frac{1}{2}S^T WS - B^T S
+\]
+
+\[
+\Delta x_k = s_k(t + 1) - s_k(t)
+\]
+
+\[
+\Delta E_k = -\frac{1}{2}\sum_{i\neq k}w_{ik}s_i\Delta s_k - \frac{1}{2}w_{kj}s_j\Delta s_k - b_k\Delta s_k
+\]
+
+\[
+= -(\sum_{j=1}^n w_{kj}s_j + b_k)\Delta s_k
+\]
+
+\[
+= -u_k\Delta s_k
+\]
+
+\[
+\begin{cases}
+u_k > 0 & \Delta s_k = s_k(t + 1) - s_k(t) = 2 \\
+u_k < 0 & \Delta s_k = s_k(t + 1) - s_k(t) = -2
+\end{cases}
+\]
+
+

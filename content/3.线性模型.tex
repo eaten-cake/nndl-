@@ -1,3 +1,384 @@
 \section{线性模型}
 
+\noindent\textbf{习题3-1:} 证明在两类线性分类中，权重$\omega$与决策平面正交.
+
+\[f(x; \omega) = 0\]
+\[\omega^T x + b = 0\]
+
+求$\omega$与$f(x;\omega)$正交，则证对于所有在$f(x;\omega)$上的向量与$\omega$的点积为0
+
+对于任意$x_1,x_2$属于$f(x;\omega)$都有
+
+\[\omega^T x_1 + b = 0\]
+\[\omega^T x_2 + b = 0\]
+
+则有
+
+\[\omega^T x_1 + b = \omega^T x_2 + b\]
+\[\omega^T(x_1 - x_2) = 0\]
+
+而$x_1 - x_2$可看作向量$\overrightarrow{x_2x_1}$，并且在$f(x;\omega)$内，所以$\omega$与$f(x;\omega)$正交。
+
+
+\noindent\textbf{习题3-2:} 在线性空间中，证明一个点 $x$ 到平面 $f(x;w) = w^Tx + b = 0$ 的距离为
+\[
+\frac{|f(x;w)|}{\|w\|}.
+\]
+
+证明：
+
+为了得到$x_1$到平面的距离，需要找到平面上一点$x_2$，使$x_1 - x_2$与该平面垂直，即
+
+\[x_1 - x_2 \parallel w\]
+
+所以
+
+\[\exists k \quad x_1 - x_2 = kw\]
+
+于是
+
+\[\gamma = \|x_1 - x_2\| = |k|\|w\|\]
+
+又
+
+\[f(x_1; w) = w^T x_1 + b\]
+\[0 = w^T x_2 + b\]
+
+所以
+
+\[w^T(x_1 - x_2) = f(x_1; w)\]
+
+代入$x_1 - x_2 = kw$
+
+\[k\|w\|^2 = f(x_1; w)\]
+
+从而
+
+\[\gamma = \frac{|f(x; w)|}{\|w\|}\]
+
+
+\noindent\textbf{习题3-3:} 在线性分类中，决策区域是凸的。即若点 $x_1$ 和 $x_2$ 被分为类别 $c$，则点
+\[
+\rho x_1 + (1-\rho)x_2
+\]
+也会被分为类别 $c$，其中 $\rho \in (0,1)$。
+
+证明：
+
+(2) 对于多分类来说
+
+点$x_1$和$x_2$被分为类别$c$,则说明(P59定义3.2)
+
+\[f_c(x_1; w_c^*) > f_{\bar{c}}(x_1; w_{\bar{c}}^*) \quad f_c(x_2; w_c^*) > f_{\bar{c}}(x_2; w_{\bar{c}}^*)\]
+
+故$f_c(x_1; w_c^*) \quad f_c(x_1; w_{\bar{c}}^*) > 0 \quad f_c(x_2; w_c^*) \quad f_{\bar{c}}(x_2; w_{\bar{c}}^*) > 0$
+
+因此$w_c^T x_1 + b_c - w_{\bar{c}}^T x_1 - b_{\bar{c}} > 0 \quad w_c^T x_2 + b_c - w_{\bar{c}}^T x_2 - b_{\bar{c}} > 0$
+
+因为$\rho \in (0,1)$所以:
+
+\[\rho(w_c^T x_1 + b_c - w_{\bar{c}}^T x_1 - b_{\bar{c}}) > 0 \quad (1-\rho)(w_c^T x_2 + b_c - w_{\bar{c}}^T x_2 - b_{\bar{c}}) > 0\]
+
+所以: $\rho(w_c^T x_1 + b_c - w_{\bar{c}}^T x_1 - b_{\bar{c}}) + (1-\rho)(w_c^T x_2 + b_c - w_{\bar{c}}^T x_2 - b_{\bar{c}}) > 0$
+
+\[w_c^T \rho x_1 + \rho b_c - w_{\bar{c}}^T \rho x_1 - \rho b_{\bar{c}} + w_c^T(1-\rho)x_2 + (1-\rho)b_c - w_{\bar{c}}^T(1-\rho)x_2 - (1-\rho)b_{\bar{c}} > 0\]
+
+故$w_c^T(\rho x_1 + (1-\rho)x_2) + b_c - w_{\bar{c}}^T(\rho x_1 + (1-\rho)x_2) - b_{\bar{c}} > 0$
+
+因此$f_c(\rho x_1 + (1-\rho)x_2; w_c^*) - f_{\bar{c}}(\rho x_1 + (1-\rho)x_2; w_{\bar{c}}^*) > 0$
+
+所以$f_c(\rho x_1 + (1-\rho)x_2; w_c^*) > f_{\bar{c}}(\rho x_1 + (1-\rho)x_2; w_{\bar{c}}^*)$
+
+所以点$\rho x_1 + (1-\rho)x_2$也会被分为类别$c$
+
+证毕
+
+
+\noindent\textbf{习题3-4:} 给定一个多分类的数据集，证明：(1) 如果数据集中每个类的样本都和除该类之外的样本是线性可分的，则该数据集一定是线性可分的；(2) 如果数据集中每两个类的样本是线性可分的，那该数据集不一定是线性可分的。
+
+证明：
+
+(1)
+
+如果数据集中每个类的样本都和除该类之外的样本是线性可分的
+
+那么假设第$c$类与除$c$类以外的样本是线性可分的
+
+则存在$w_c^*$，使得$f_c(x; w_c^*) > f_{\bar{c}}(x; w_{\bar{c}}^*)$
+
+同理对于每一类都成立
+
+因此存在$C$的权重向量$w_1^*, \cdots, w_c^*$，使得第$c(1 \leq c \leq C)$类的所有样本都满足
+\[f_c(x; w_c^*) > f_{\bar{c}}(x; w_{\bar{c}}^*), \forall \bar{c} \neq c\]
+
+故训练集一定是线性可分的。
+
+证毕
+
+（此处有一张图片，请自行观看）
+
+(2) 从"一对一方式"的角度：
+
+假设样本的类别为$C$，则需要构造$C(C-1)/2$个权重向量$w$
+
+若想单独分出一类样本$c$，则使用$C-1$个权重向量可以将其他样本与$c$类样本区分开来。
+
+但是想要在分出$c$类样本的基础上分出$d$类，
+
+则需要考虑划分$d$类与其他样本的$C-1$个权重向量与$c$类的那$C-1$个权重向量是否划分出了不可判断区域，
+
+也就是我们无法保证这些向量相交于一点。所以样本不一定线性可分。
+
+
+\noindent\textbf{习题3-5:} 在 Logistic 回归中，是否可以用 $\hat{y} = \sigma(w^Tx)$ 去逼近正确的标签 $y$，并用平方损失 $(y - \hat{y})^2$ 最小化来优化参数 $w$？
+
+解答：
+
+理论上来说，可以但不合适。
+
+最小化平方损失函数本质上等同于在误差服从高斯分布的假设下的极大似然估计，然而大部分分类问题的误差并不服从高斯分布。
+
+而且在实际应用中交叉熵在和softmax激活函数的配合下，能够使得损失值越大导数越大，损失值越小导数越小，这就能加快学习速率。
+
+然而若使用平方损失函数，则损失越大导数越小，学习速率很慢。每个标签距离，没有实际意义。不可反映问题的优化程度。
+
+(2) 以cross entropy作为loss function时:
+
+\[\sigma'=\sigma\cdot(1-\sigma) \qquad y=\sigma(w^Tx)\]
+
+\[L=-y\ln \hat{y}-(1-y)\ln(1-\hat{y})\]
+
+\[\frac{\partial L}{\partial w}=-y\frac{1}{\hat{y}}\sigma'x-(1-y)\frac{1}{1-\hat{y}}(-1)\sigma'x\]
+
+\[=-\frac{y\sigma(1-\sigma)x(1-\hat{y})}{\hat{y}(1-\hat{y})}+\frac{(1-y)\hat{y}\sigma(1-\sigma)x}{\hat{y}(1-\hat{y})}\]
+
+\[=\frac{\hat{y}\sigma(1-\sigma)x-y\hat{y}\sigma(1-\sigma)x-y\sigma(1-\sigma)x+y\hat{y}\sigma(1-\sigma)x}{\hat{y}(1-\hat{y})}\]
+
+\[=\frac{\hat{y}\sigma(1-\sigma)x-y\sigma(1-\sigma)x}{\hat{y}(1-\hat{y})}\]
+
+\[=\frac{(\hat{y}-y)\sigma(1-\sigma)x}{\hat{y}(1-\hat{y})}\]
+
+\[=\frac{(\hat{y}-y)\hat{y}(1-\hat{y})x}{\hat{y}(1-\hat{y})}\]
+
+\[=(\hat{y}-y)x\]
+
+可以看到梯度公式中没有$\sigma'$这一项，权重受到误差$(\hat{y}-y)$的影响，所以当误差大的时候，权重更新快；当误差小的时候，权重更新慢。这是一个很好的性质。
+
+所以当使用Sigmoid作为激活函数的时候，常用交叉熵损失函数而不用均方误差损失函数。
+
+
+\noindent\textbf{习题3-6:} 在 Softmax 回归的风险函数（公式 (3.39)）中，如果加上正则化项会有什么影响？
+
+解答：
+
+公式3.39：\[R(W) = -\frac{1}{N}\sum_{n=1}^N(y^{(n)})^T\log\hat{y}^{(n)}\]
+
+加入正则化后：
+
+\[R(W) = -\frac{1}{N}\sum_{n=1}^N(y^{(n)})^T\log\hat{y}^{(n)} + \lambda W^TW\]
+
+则\[\frac{\partial R(W)}{\partial W} = -\frac{1}{N}\sum_{n=1}^N(\hat{y}^{(n)} - y^{(n)})x^{(n)} + 2\lambda W\]
+
+更新参数时：\[W = W + \alpha\frac{1}{N}\sum_{n=1}^N(\hat{y}^{(n)} - y^{(n)})x^{(n)} - 2\lambda W\]
+
+加入正则化后，在更新参数时每次要减去$2\lambda W$，使得参数不会太大，便不会造成溢出之类的错误发生，同时也会抑制过拟合。
+
+
+\noindent\textbf{习题3-7:} 验证平均感知器训练算法 3.2 中给出的平均权重向量的计算方式和公式 (3.77) 等价。
+
+解答：
+
+(1) 算法3.2:
+
+设预测错误的样本有 $K$ 个，分别为 $(x_1,y_1), (x_2,y_2),\cdots,(x_K,y_K)$，并且设选取到这些样本时的迭代次数为 $t_k$
+
+根据算法3.2的步骤，可计算出：
+
+\[w = x_1y_1 + x_2y_2 + \cdots + x_ky_k\]
+
+\[u = t_1x_1y_1 + t_2x_2y_2 + \cdots + t_kx_ky_k\]
+
+因此
+
+\[\bar{w} = w - \frac{1}{T}u\]
+
+\[= x_1y_1 + x_2y_2 + \cdots + x_ky_k - \frac{1}{T}(t_1x_1y_1 + t_2x_2y_2 + \cdots + t_kx_ky_k)\]
+
+\[= \frac{T-t_1}{T}x_1y_1 + \frac{T-t_2}{T}x_2y_2 + \cdots + \frac{T-t_k}{T}x_ky_k\]
+
+(2) 公式(3.77):
+
+\[w = \sum_{t=1}^T w_t \qquad w_t = \sum_{i=1}^{k\leq t} x_iy_i \qquad \bar{w} = \frac{1}{T}w\]
+
+\[w = (x_1y_1 + \cdots + x_1y_1) + (x_1y_1 + x_2y_2 + \cdots + x_1y_1 + x_2y_2) + \cdots + (\sum_{i=1}^k x_iy_i + \cdots + \sum_{i=1}^k x_iy_i)\]
+
+上式中，当第二个预测错误的样本选取时才开始加 $x_2y_2$，也就是说到达 $t_2$ 时刻时才开始加，其余 $x_iy_i$ 类似，到达 $t_i$ 时刻时开始加
+
+因此 $x_iy_i$ 共相加了 $T - t_i$ 次
+
+所以 \[w = (T-t_1)x_1y_1 + (T-t_2)x_2y_2 + \cdots + (T-t_k)x_ky_k\]
+
+\[\bar{w} = \frac{T-t_1}{T}x_1y_1 + \frac{T-t_2}{T}x_2y_2 + \cdots + \frac{T-t_k}{T}x_ky_k\]
+
+证毕
+
+随着迭代次数的增大，学习率在逐渐减小。这个就满足了训练的需求，在训练前期学习速率较大，使算法能够快速收敛；在训练后期学习速率较小，使训练误差较小。这一方法又称为变步长学习法。
+
+
+\noindent\textbf{习题3-8:} 证明定理 3.2。
+
+证明：
+
+令 \[\psi_k = \phi(x^{(k)}, y^{(k)}) - \phi(x^{(k)}, \hat{y}^{(k)})\]
+
+那么根据算法3.3可知：\[w_K = \sum_{k=1}^K \psi_k\]
+
+\[\|w_k\|^2 = \|w_{k-1} + \psi_k\|^2\]
+\[= \|w_{k-1}\|^2 + \|\psi_k\|^2 + 2w_{k-1}^T\psi_k\]
+\[\leq \|w_{k-1}\|^2 + R^2\]
+\[\leq \|w_{k-2}\|^2 + 2R^2\]
+\[\leq kR^2\]
+
+\[\|w_k\|^2 = \|w^*\|^2 \cdot \|w_k\|^2\]
+\[\geq \|w^{*T}w_k\|^2\]
+\[= \|w^{*T}\sum_{i=1}^k \psi_i\|^2\]
+\[= \|\sum_{i=1}^k w^{*T}\psi_i\|^2\]
+\[= \|\sum_{i=1}^k w^{*T}(\phi(x^{(i)}, y^{(i)}) - \phi(x^{(i)}, \hat{y}^{(i)}))\|^2\]
+\[= \|\sum_{i=1}^k(w^{*T}\phi(x^{(i)}, y^{(i)}) - w^{*T}\phi(x^{(i)}, \hat{y}^{(i)}))\|^2\]
+\[= \|\sum_{i=1}^k < w^*, \phi(x^{(i)}, y^{(i)}) > - < w^*, \phi(x^{(i)}, \hat{y}^{(i)}) > \|^2\]
+\[\geq k^2\gamma^2\]
+
+因此：\[k^2\gamma^2 \leq \|w_k\|^2 \leq kR^2\]
+
+\[k^2\gamma^2 \leq kR^2\]
+
+所以 \[k \leq \frac{R^2}{\gamma^2}\]
+
+证毕
+
+\noindent\textbf{习题3-9:} 若数据集线性可分，证明支持向量机中将两类样本正确分开的最大间隔分割超平面存在且唯一
+
+\[\min_{w,b} \frac{1}{2}\|w\|^2\]
+
+s.t. \[1 - y^{(n)}(w^Tx^{(n)} + b) \leq 0, \quad \forall n \in \{1,\cdots,N\}.\]
+
+证明：
+
+(1) 最大间隔分割超平面存在
+
+若数据集线性可分，此优化问题必然存在可行解，又由于3.87为凸优化，目标函数有下界，所以必有解。
+
+最优解中的 $w$ 不能为0，否则 $1-yb$ 不能保证小于0
+
+因此最大间隔分割超平面必然存在
+
+(2) 唯一性
+
+假设有两个最优解：$(w_1^*, b_1^*), (w_2^*, b_2^*)$，由于目标函数为找到最小的 $\|w\|$，所以
+
+$\|w_1^*\| = \|w_2^*\|$，设其为 $c$，设 $w = \frac{w_1^* + w_2^*}{2}$ (解出的可行解)
+
+那么 $c \leq \|w\| = \|\frac{w_1^* + w_2^*}{2}\| \leq \frac{1}{2}(\|w_1^*\| + \|w_2^*\|) = c$
+
+因此有 $\|w\| = \frac{1}{2}(\|w_1^*\| + \|w_2^*\|)$
+
+所以有 $w_1^* = \lambda \cdot w_2^*$ $|\lambda| = 1$，若 $\lambda = -1$，则 $w = 0$，矛盾，所以 $\lambda = 1$，即 $w_1^* = w_2^*$
+
+由此记 $w^* = w_1^* = w_2^*$，所以最优解为 $(w^*, b_1^*), (w^*, b_2^*)$
+
+假设有 $x_1', x_2'$ 是集合 $\{x_i|y_i = +1\}$ 分别对应于 $(w^*, b_1^*), (w^*, b_2^*)$ 的解，$x_1'', x_2''$ 是集合 $\{x_i|y_i = -1\}$ 分别对应于 $(w^*, b_1^*), (w^*, b_2^*)$ 的解，因此根据SVM的结论
+
+\[b^* = \bar{y} - w^{*T}\bar{x}\]
+
+可得：
+
+\[\begin{cases} 
+b_1^* = 1 - w^{*T}x_1' \\
+b_1^* = -1 - w^{*T}x_1''
+\end{cases}\]
+
+因此 $b_1^* = -\frac{1}{2}(w^{*T}x_1' + w^{*T}x_1'')$
+
+同理可得 $b_2^* = -\frac{1}{2}(w^{*T}x_2' + w^{*T}x_2'')$
+
+所以 $b_1^* - b_2^* = -\frac{1}{2}(w^{*T}(x_1' - x_2') + w^{*T}(x_1'' - x_2''))$
+
+将 $x_1', x_2'$ 带入约束条件中：将样本点 $x_1'$ 代入超平面 $(w^*, b_2^*)$，同理将样本点 $x_2'$ 代入超平面方程 $(w^*, b_1^*)$ 有：
+
+\[w^{*T}x_2' + b_1^* \geq 1 = w^{*T}x_1' + b_1^*\]
+
+\[w^{*T}x_1' + b_2^* \geq 1 = w^{*T}x_2' + b_2^*\]
+
+可得：
+
+\[w^{*T}x_2' \geq w^{*T}x_1'\]
+
+\[w^{*T}x_1' \geq w^{*T}x_2'\]
+
+所以 \[w^{*T}(x_1' - x_2') = 0\]
+
+同理可得 \[w^{*T}(x_1'' - x_2'') = 0\]
+
+所以 \[b_1^* = b_2^*\]
+
+故 $(w_1^*, b_1^*), (w_2^*, b_2^*)$ 相同
+
+证毕
+
+同时参见[https://zhuanlan.zhihu.com/p/49487903]
+
+
+\noindent\textbf{习题3-10:} 验证公式（3.97）.
+\[x,z \in \mathbb{R}^2, 因此设 x = (x_1 \quad x_2)^T \quad z=(z_1 \quad z_2)^T\]
+
+(1)
+
+\[k(x,z) = (1 + x^Tz)^2\]
+\[= (1 + x_1z_1 + x_2z_2)^2\]
+\[= 1 + 2(x_1z_1 + x_2z_2) + x_1^2z_1^2 + x_2^2z_2^2 + 2x_1z_1x_2z_2\]
+\[= 1 + 2x_1z_1 + 2x_2z_2 + x_1^2z_1^2 + x_2^2z_2^2 + 2x_1z_1x_2z_2\]
+
+(2)
+
+\[\phi(x)^T\phi(z) = \begin{pmatrix} 1 & \sqrt{2}x_1 & \sqrt{2}x_2 & \sqrt{2}x_1x_2 & x_1^2 & x_2^2 \end{pmatrix} \begin{pmatrix} 1 \\ \sqrt{2}z_1 \\ \sqrt{2}z_2 \\ \sqrt{2}z_1z_2 \\ z_1^2 \\ z_2^2 \end{pmatrix}\]
+
+\[= 1 + 2x_1z_1 + 2x_2z_2 + 2x_1z_1x_2z_2 + x_1^2z_1^2 + x_2^2z_2^2\]
+
+证毕
+
+
+\noindent\textbf{习题3-11:} 在软间隔支持向量机中，试给出原始优化问题的对偶问题，并列出其 KKT 条件。
+
+证明：
+
+原问题：
+
+\[\min_{w,b,\xi} \frac{1}{2}\|w\|^2 + C\sum_{n=1}^N \xi_n\]
+
+\[s.t. \quad 1-y_n(w^Tx_n + b) - \xi_n \leq 0, \quad \forall n \in \{1,\cdots,N\}\]
+\[\xi_n \geq 0, \quad \forall n \in \{1,\cdots,N\}\]
+
+使用拉格朗日乘子法，可得：
+
+\[L(w,b,\xi,\lambda,\mu) = \frac{1}{2}\|w\|^2 + C\sum_{i=1}^N \xi_i + \sum_{i=1}^N \lambda_i(1-y_i(w^Tx_i + b) - \xi_i) - \sum_{i=1}^N \mu_i\xi_i\]
+
+将其转化为最小最大问题：
+
+\[\min_{w,b,\xi} \max_{\lambda,\mu} L(w,b,\xi,\lambda,\mu)\]
+
+\[s.t. \quad \lambda_i \geq 0, \quad \forall n \in \{1,\cdots,N\}\]
+
+将其转化为对偶问题：
+
+\[\max_{\lambda,\mu} \min_{w,b,\xi} L(w,b,\xi,\lambda,\mu)\]
+
+\[s.t. \quad \lambda_i \geq 0, \quad \forall n \in \{1,\cdots,N\}\]
+
+接下来求解 \[\min_{w,b,\xi} L(w,b,\xi,\lambda,\mu)\]
+
+令 \[\frac{\partial L}{\partial b} = 0 \quad 可得：\sum_{i=1}^N \lambda_iy_i = 0\]
+
+将其带入 $L$：
+
+
 

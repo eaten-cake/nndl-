@@ -56,12 +56,80 @@
 \frac{\partial L_t}{\partial b_{ij}} = \sum_{k=1}^t \delta_{t,k}
 \]
 
-\noindent\textbf{习题6-3} 
+\noindent\textbf{习题6-3} 当使用公式$(6.50)$作为循环神经网络的状态更新公式时，分析其可能存在梯度爆炸的原因并给出解决方法。
 
-\noindent\textbf{习题6-4}
+原因：
 
-\noindent\textbf{习题6-5}
+(1) 梯度爆炸问题：令 $z_k = Uh_{k-1} + Wx_k + b$ 为在第 $k$ 时刻函数 $g(\cdot)$ 的输入，在计算公式$(6.34)$中的误差项 $\delta_{k,k} = \frac{\partial c_t}{\partial z_k}$ 时，梯度可能会过大，从而导致梯度爆炸问题。
 
-\noindent\textbf{习题6-6}
+其中$(6.34)$的误差项为$6.2$中的$\delta_{t,k}$
 
-\noindent\textbf{习题6-7} 
+解决方法：
+增加门控机制，例如：长短期记忆神经网络(LSTM)。
+
+
+\noindent\textbf{习题6-4} 推导LSTM网络中参数的梯度，并分析其避免梯度消失的效果。
+
+解答：（请自行观看插图） 其中E是损失函数
+
+\noindent\textbf{习题6-5} 推导GRU网络中参数的梯度，并分析其避免梯度消失的效果。
+
+解答：（请自行观看插图）
+
+\noindent\textbf{习题6-6} 除了堆叠循环神经网络外，还有什么结构可以增加循环神经网络深度？
+
+增加深度的方法是：增加同一时刻网络输入到输出之间的路径$X_t \to Y_t$ ($X_t \to H_t$或者$H_t \to Y_t$)
+
+常见结构除了堆叠循环神经网络，还有双向循环神经网络、递归神经网络、图神经网络等。
+
+
+\noindent\textbf{习题6-7} 证明当递归神经网络的结构退化为线性序列结构时，递归神经网络就等价于简单循环神经网络。
+
+递归神经网络一般为树状的层次结构：
+
+\[
+\begin{tikzpicture}[level distance=1.5cm,
+    level 1/.style={sibling distance=3cm},
+    level 2/.style={sibling distance=2cm}]
+    \node {y};
+    \node[below] {h3} 
+        child {
+            node {h1}
+            child {node {x1}}
+            child {node {x2}}
+        }
+        child {
+            node {h2}
+            child {node {x3}}
+            child {node {x4}}
+        };
+\end{tikzpicture}
+\]
+
+若退化为线性序列结构：
+
+\[
+\begin{tikzpicture}[level distance=1.5cm,
+    level 1/.style={sibling distance=2.5cm}]
+    \node {y};
+    \node[below] {h3}
+        child {
+            node {h2}
+            child {node {x3}}
+        }
+        child {
+            node {h1}
+            child {
+                node {h1}
+                child {node {x1}}
+                child {node {x2}}
+            }
+        };
+\end{tikzpicture}
+\]
+
+如图，即等价于简单循环网络。
+
+（该题若不清楚，请自行查看插图，一样的内容）
+
+
